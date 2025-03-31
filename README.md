@@ -2,6 +2,8 @@
 
 Este script permite descargar y procesar datos del nivel del mar desde la web del IOC, con opciones para eliminar la señal de marea y extraer datos asociados a eventos sísmicos.  
 
+Posee también la facilidad de un .exe
+
 # 🇪🇸 
 
 ## Requerimientos / Request
@@ -46,6 +48,14 @@ El script `ioc_getdata.py` realiza lo siguiente:
    - La eliminación se realiza restando la señal de marea de la señal original.
 5. **Visualización de la señal**
    - Visualización de la señal procesada mediante matplotlib.
+## Run
+
+En la misma carpeta, ejecuta `python ioc_getdata.py` , la data será descargada en el mismo directorio
+
+Además, ejecutando `python gui_getdata` se puede interactuar con una interfaz gráfica simple
+
+Si no posees python o no deseas ocuparlo, se ha hecho un .exe con la interfaz gráfica.
+
 # 🇺🇸
 
 # IOC-Data-Downloader-Python
@@ -79,3 +89,5 @@ The `get_data.py` script performs the following tasks:
 ## Run
 
 Just in the same folder, run `python ioc_getdata.py` , the data will be saved in the same directory
+
+
