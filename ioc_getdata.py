@@ -115,37 +115,38 @@ def visualizar_datos(df, filtrar):
     plt.grid()
     plt.show()
 
-# Leer estaciones desde archivo / Read stations from file
-ioc_info = pd.read_csv("ioc_stations.txt", sep="\s+", engine="python", header=0)
-ioc_info.columns = ["Code", "Country", "Location"]
-
-# Mostrar estaciones disponibles / Show available stations
-show_stations = input("¿Desea ver los códigos de las estaciones disponibles? (s/n) / Do you want to see available station codes? (y/n): ").strip().lower()
-if show_stations == "s":
-    country = input("Ingrese el país (en inglés, ex. USA) / Enter the country (in English, e.g., USA): ").strip()
-    filtered_data = ioc_info[ioc_info["Country"].str.contains(country, case=False, na=False)]
-    print(filtered_data[["Code", "Location"]].to_string(index=False))
-
-# Solicitar parámetros de entrada / Request input parameters
-station_codes = input("Ingrese los códigos de las estaciones separados por coma (ej: ancu,quintero) / Enter station codes separated by commas (e.g., ancu,quintero): ").split(",")
-start_date = input("Ingrese la fecha de inicio (YYYY-MM-DD) / Enter start date (YYYY-MM-DD): ").strip()
-period_days = int(input("Ingrese el período en días / Enter the period in days: ").strip())
-
-# Preguntar opciones de filtrado y corte / Ask about filtering and trimming options
-filtrar = input("¿Desea filtrar la marea y la tendencia? (s/n) / Do you want to filter the tide and trend? (y/n): ").strip().lower()
-cortar = input("¿Desea cortar los datos por un terremoto? (s/n) / Do you want to trim the data based on an earthquake? (y/n): ").strip().lower()
-
-sismo_datetime = None
-if cortar == "s":
-    sismo_date = input("Ingrese la fecha del terremoto (YYYY-MM-DD) / Enter earthquake date (YYYY-MM-DD): ").strip()
-    sismo_time = input("Ingrese la hora del terremoto en UTC (HH:MM:SS) / Enter earthquake time in UTC (HH:MM:SS): ").strip()
-    sismo_datetime = datetime.strptime(f"{sismo_date} {sismo_time}", "%Y-%m-%d %H:%M:%S")
-    tiempo_guardar = int(input("Ingrese el tiempo en minutos a guardar / Enter time in minutes to save: "))
-
-for station_code in station_codes:
-    station_code = station_code.strip()
-    df = obtener_datos(station_code, start_date, period_days)
-    if df is not None:
-        df = procesar_datos(df, filtrar, cortar, sismo_datetime, tiempo_guardar)
-        visualizar_datos(df, filtrar)
-        guardar_datos(df, station_code, sismo_datetime)
+if __name__=="__main__":
+    # Leer estaciones desde archivo / Read stations from file
+    ioc_info = pd.read_csv("ioc_stations.txt", sep="\s+", engine="python", header=0)
+    ioc_info.columns = ["Code", "Country", "Location"]
+    
+    # Mostrar estaciones disponibles / Show available stations
+    show_stations = input("¿Desea ver los códigos de las estaciones disponibles? (s/n) / Do you want to see available station codes? (y/n): ").strip().lower()
+    if show_stations == "s":
+        country = input("Ingrese el país (en inglés, ex. USA) / Enter the country (in English, e.g., USA): ").strip()
+        filtered_data = ioc_info[ioc_info["Country"].str.contains(country, case=False, na=False)]
+        print(filtered_data[["Code", "Location"]].to_string(index=False))
+    
+    # Solicitar parámetros de entrada / Request input parameters
+    station_codes = input("Ingrese los códigos de las estaciones separados por coma (ej: ancu,quintero) / Enter station codes separated by commas (e.g., ancu,quintero): ").split(",")
+    start_date = input("Ingrese la fecha de inicio (YYYY-MM-DD) / Enter start date (YYYY-MM-DD): ").strip()
+    period_days = int(input("Ingrese el período en días / Enter the period in days: ").strip())
+    
+    # Preguntar opciones de filtrado y corte / Ask about filtering and trimming options
+    filtrar = input("¿Desea filtrar la marea y la tendencia? (s/n) / Do you want to filter the tide and trend? (y/n): ").strip().lower()
+    cortar = input("¿Desea cortar los datos por un terremoto? (s/n) / Do you want to trim the data based on an earthquake? (y/n): ").strip().lower()
+    
+    sismo_datetime = None
+    if cortar == "s":
+        sismo_date = input("Ingrese la fecha del terremoto (YYYY-MM-DD) / Enter earthquake date (YYYY-MM-DD): ").strip()
+        sismo_time = input("Ingrese la hora del terremoto en UTC (HH:MM:SS) / Enter earthquake time in UTC (HH:MM:SS): ").strip()
+        sismo_datetime = datetime.strptime(f"{sismo_date} {sismo_time}", "%Y-%m-%d %H:%M:%S")
+        tiempo_guardar = int(input("Ingrese el tiempo en minutos a guardar / Enter time in minutes to save: "))
+    
+    for station_code in station_codes:
+        station_code = station_code.strip()
+        df = obtener_datos(station_code, start_date, period_days)
+        if df is not None:
+            df = procesar_datos(df, filtrar, cortar, sismo_datetime, tiempo_guardar)
+            visualizar_datos(df, filtrar)
+            guardar_datos(df, station_code, sismo_datetime)
